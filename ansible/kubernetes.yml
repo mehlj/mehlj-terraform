@@ -1,0 +1,24 @@
+---
+- name: Change passwords from defaults
+  hosts: all
+  become: yes
+  roles:
+    - { role: change-password, secret_name: mehlj_lab_creds }
+
+- name: Configure /etc/hosts with future k8s nodes
+  hosts: all
+  become: yes
+  roles:
+    - configure-host-file
+
+- name: Conform to kubespray server requirements
+  hosts: all
+  become: yes
+  roles:
+    - kubespray-requirements
+
+- name: Install helm for later use
+  hosts: all
+  become: yes
+  roles:
+    - install-helm

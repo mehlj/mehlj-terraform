@@ -1,0 +1,6 @@
+---
+- name: Deploy traefik as NodePort and two example applications
+  hosts: k8snode0
+  become: yes
+  roles:
+    - deploy-traefik
