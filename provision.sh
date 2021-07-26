@@ -3,15 +3,17 @@
 # NOTE - this script will destroy + recreate your existing terraform in $terraform_dir
 # NOTE - make sure to configure kubespray variables + inventory before running this script
 # NOTE - make sure you have the mehlj-ansible roles where ansible expects them, or add a custom directory in your ansible.cfg
+# NOTE - the ansible vault password file must contain the correct password to decrypt the Traefik private key file
 
 # example usage:
-# ./provision.sh -t /home/mehlj/git/mehlj-terraform/ -k /home/mehlj/git/kubespray/ -n mehlj-cluster
+# ./provision.sh -t /home/mehlj/git/mehlj-terraform/ -k /home/mehlj/git/kubespray/ -n mehlj-cluster -f ~/.vault_pass.txt
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
         -t|--terraform-dir) terraform_dir="$2"; shift ;;
         -k|--kubespray-dir) kubespray_dir="$2"; shift ;;
         -n|--kubespray-cluster-name) kubespray_cluster_name="$2"; shift ;;
+        -f|--vault-password-file) vault_password_file="$2"; shift ;;
         *) echo "Unknown parameter passed: $1"; exit 1 ;;
     esac
     shift
@@ -48,4 +50,4 @@ ansible kube_control_plane -i inventory/$kubespray_cluster_name/hosts.yml -m cop
 
 # Deploy traefik and example hello-world applications
 cd $current_dir
-ansible-playbook ansible/traefik.yml -b -i ansible/main_host.yml
+ansible-playbook ansible/traefik.yml -b -i ansible/main_host.yml --vault-password-file $vault_password_file

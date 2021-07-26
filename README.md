@@ -12,5 +12,5 @@ $ terraform init
 
 ## Running
 ```
-$ ./provision.sh -t /home/mehlj/git/mehlj-terraform/ -k /home/mehlj/git/kubespray/ -n mehlj-cluster
+$ ./provision.sh -t /home/mehlj/git/mehlj-terraform/ -k /home/mehlj/git/kubespray/ -n mehlj-cluster -f ~/.vault_pass.txt
 ```
