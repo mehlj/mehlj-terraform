@@ -116,7 +116,7 @@ resource "vsphere_virtual_machine" "k8snode0" {
   }
 
   provisioner "remote-exec" {
-    inline = ["yum install epel-release -y", "yum install git ansible -y", "git clone http://192.168.1.72/root/mehlj-ansible.git", "ansible-playbook mehlj-ansible/ssh.yml"]
+    inline = ["yum install epel-release -y", "yum install git ansible -y", "git clone https://github.com/mehlj/mehlj-ansible.git", "ansible-playbook mehlj-ansible/ssh.yml"]
   }
 }
 
@@ -169,7 +169,7 @@ resource "vsphere_virtual_machine" "k8snode1" {
   }
 
   provisioner "remote-exec" {
-    inline = ["yum install epel-release -y", "yum install git ansible -y", "git clone http://192.168.1.72/root/mehlj-ansible.git", "ansible-playbook mehlj-ansible/ssh.yml"]
+    inline = ["yum install epel-release -y", "yum install git ansible -y", "git clone https://github.com/mehlj/mehlj-ansible.git", "ansible-playbook mehlj-ansible/ssh.yml"]
   }
 }
 
@@ -222,6 +222,6 @@ resource "vsphere_virtual_machine" "k8snode2" {
   }
 
   provisioner "remote-exec" {
-    inline = ["yum install epel-release -y", "yum install git ansible -y", "git clone http://192.168.1.72/root/mehlj-ansible.git", "ansible-playbook mehlj-ansible/ssh.yml"]
+    inline = ["yum install epel-release -y", "yum install git ansible -y", "git clone https://github.com/mehlj/mehlj-ansible.git", "ansible-playbook mehlj-ansible/ssh.yml"]
   }
 }
