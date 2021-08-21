@@ -81,14 +81,17 @@ resource "vsphere_virtual_machine" "k8snode0" {
   resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
   datastore_id     = data.vsphere_datastore.datastore.id
 
-  num_cpus   = 2
-  memory     = 2048
-  guest_id = data.vsphere_virtual_machine.template.guest_id
+  num_cpus               = 2
+  memory                 = 4096
+  cpu_hot_add_enabled    = true
+  cpu_hot_remove_enabled = true
+  memory_hot_add_enabled = true
+  guest_id               = data.vsphere_virtual_machine.template.guest_id
 
-  scsi_type = data.vsphere_virtual_machine.template.scsi_type
+  scsi_type              = data.vsphere_virtual_machine.template.scsi_type
 
   network_interface {
-   network_id     = data.vsphere_network.mgmt_lan.id
+   network_id   = data.vsphere_network.mgmt_lan.id
    adapter_type = data.vsphere_virtual_machine.template.network_interface_types[0]
   }
 
@@ -113,7 +116,7 @@ resource "vsphere_virtual_machine" "k8snode0" {
         ipv4_netmask = 24
       }
 
-      ipv4_gateway = "192.168.1.1"
+      ipv4_gateway    = "192.168.1.1"
       dns_server_list = ["192.168.1.1","8.8.8.8",]
     }
   }
@@ -134,14 +137,17 @@ resource "vsphere_virtual_machine" "k8snode1" {
   resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
   datastore_id     = data.vsphere_datastore.datastore.id
 
-  num_cpus   = 2
-  memory     = 2048
-  guest_id = data.vsphere_virtual_machine.template.guest_id
+  num_cpus               = 2
+  memory                 = 4096
+  cpu_hot_add_enabled    = true
+  cpu_hot_remove_enabled = true
+  memory_hot_add_enabled = true
+  guest_id               = data.vsphere_virtual_machine.template.guest_id
 
-  scsi_type = data.vsphere_virtual_machine.template.scsi_type
+  scsi_type              = data.vsphere_virtual_machine.template.scsi_type
 
   network_interface {
-   network_id     = data.vsphere_network.mgmt_lan.id
+   network_id   = data.vsphere_network.mgmt_lan.id
    adapter_type = data.vsphere_virtual_machine.template.network_interface_types[0]
   }
 
@@ -166,7 +172,7 @@ resource "vsphere_virtual_machine" "k8snode1" {
         ipv4_netmask = 24
       }
 
-      ipv4_gateway = "192.168.1.1"
+      ipv4_gateway    = "192.168.1.1"
       dns_server_list = ["192.168.1.1","8.8.8.8",]
     }
   }
@@ -187,14 +193,17 @@ resource "vsphere_virtual_machine" "k8snode2" {
   resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
   datastore_id     = data.vsphere_datastore.datastore.id
 
-  num_cpus   = 2
-  memory     = 2048
-  guest_id = data.vsphere_virtual_machine.template.guest_id
+  num_cpus               = 2
+  memory                 = 4096
+  cpu_hot_add_enabled    = true
+  cpu_hot_remove_enabled = true
+  memory_hot_add_enabled = true
+  guest_id               = data.vsphere_virtual_machine.template.guest_id
 
-  scsi_type = data.vsphere_virtual_machine.template.scsi_type
+  scsi_type              = data.vsphere_virtual_machine.template.scsi_type
 
   network_interface {
-   network_id     = data.vsphere_network.mgmt_lan.id
+   network_id   = data.vsphere_network.mgmt_lan.id
    adapter_type = data.vsphere_virtual_machine.template.network_interface_types[0]
   }
 
@@ -219,7 +228,7 @@ resource "vsphere_virtual_machine" "k8snode2" {
         ipv4_netmask = 24
       }
 
-      ipv4_gateway = "192.168.1.1"
+      ipv4_gateway    = "192.168.1.1"
       dns_server_list = ["192.168.1.1","8.8.8.8",]
     }
   }
