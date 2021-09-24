@@ -5,7 +5,7 @@ terraform {
       version = "1.15"
     }
     aws = {
-      source = "hashicorp/aws"
+      source  = "hashicorp/aws"
       version = "~> 3.0"
     }
   }
@@ -33,10 +33,10 @@ data "aws_secretsmanager_secret_version" "current" {
 
 # Configure the vSphere Provider
 provider "vsphere" {
-    vsphere_server = var.vsphere_server
-    user = var.vsphere_user
-    password = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["vsphere"]
-    allow_unverified_ssl = true
+  vsphere_server       = var.vsphere_server
+  user                 = var.vsphere_user
+  password             = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["vsphere"]
+  allow_unverified_ssl = true
 }
 
 # Configure the AWS Provider
@@ -88,18 +88,18 @@ resource "vsphere_virtual_machine" "k8snode0" {
   memory_hot_add_enabled = true
   guest_id               = data.vsphere_virtual_machine.template.guest_id
 
-  scsi_type              = data.vsphere_virtual_machine.template.scsi_type
+  scsi_type = data.vsphere_virtual_machine.template.scsi_type
 
   network_interface {
-   network_id   = data.vsphere_network.mgmt_lan.id
-   adapter_type = data.vsphere_virtual_machine.template.network_interface_types[0]
+    network_id   = data.vsphere_network.mgmt_lan.id
+    adapter_type = data.vsphere_virtual_machine.template.network_interface_types[0]
   }
 
   disk {
-   label            = "disk0"
-   size             = data.vsphere_virtual_machine.template.disks.0.size
-   eagerly_scrub    = data.vsphere_virtual_machine.template.disks.0.eagerly_scrub
-   thin_provisioned = data.vsphere_virtual_machine.template.disks.0.thin_provisioned
+    label            = "disk0"
+    size             = data.vsphere_virtual_machine.template.disks.0.size
+    eagerly_scrub    = data.vsphere_virtual_machine.template.disks.0.eagerly_scrub
+    thin_provisioned = data.vsphere_virtual_machine.template.disks.0.thin_provisioned
   }
 
   clone {
@@ -117,7 +117,7 @@ resource "vsphere_virtual_machine" "k8snode0" {
       }
 
       ipv4_gateway    = "192.168.1.1"
-      dns_server_list = ["192.168.1.1","8.8.8.8",]
+      dns_server_list = ["192.168.1.1", "8.8.8.8", ]
     }
   }
   connection {
@@ -144,18 +144,18 @@ resource "vsphere_virtual_machine" "k8snode1" {
   memory_hot_add_enabled = true
   guest_id               = data.vsphere_virtual_machine.template.guest_id
 
-  scsi_type              = data.vsphere_virtual_machine.template.scsi_type
+  scsi_type = data.vsphere_virtual_machine.template.scsi_type
 
   network_interface {
-   network_id   = data.vsphere_network.mgmt_lan.id
-   adapter_type = data.vsphere_virtual_machine.template.network_interface_types[0]
+    network_id   = data.vsphere_network.mgmt_lan.id
+    adapter_type = data.vsphere_virtual_machine.template.network_interface_types[0]
   }
 
   disk {
-   label            = "disk0"
-   size             = data.vsphere_virtual_machine.template.disks.0.size
-   eagerly_scrub    = data.vsphere_virtual_machine.template.disks.0.eagerly_scrub
-   thin_provisioned = data.vsphere_virtual_machine.template.disks.0.thin_provisioned
+    label            = "disk0"
+    size             = data.vsphere_virtual_machine.template.disks.0.size
+    eagerly_scrub    = data.vsphere_virtual_machine.template.disks.0.eagerly_scrub
+    thin_provisioned = data.vsphere_virtual_machine.template.disks.0.thin_provisioned
   }
 
   clone {
@@ -173,7 +173,7 @@ resource "vsphere_virtual_machine" "k8snode1" {
       }
 
       ipv4_gateway    = "192.168.1.1"
-      dns_server_list = ["192.168.1.1","8.8.8.8",]
+      dns_server_list = ["192.168.1.1", "8.8.8.8", ]
     }
   }
   connection {
@@ -200,18 +200,18 @@ resource "vsphere_virtual_machine" "k8snode2" {
   memory_hot_add_enabled = true
   guest_id               = data.vsphere_virtual_machine.template.guest_id
 
-  scsi_type              = data.vsphere_virtual_machine.template.scsi_type
+  scsi_type = data.vsphere_virtual_machine.template.scsi_type
 
   network_interface {
-   network_id   = data.vsphere_network.mgmt_lan.id
-   adapter_type = data.vsphere_virtual_machine.template.network_interface_types[0]
+    network_id   = data.vsphere_network.mgmt_lan.id
+    adapter_type = data.vsphere_virtual_machine.template.network_interface_types[0]
   }
 
   disk {
-   label            = "disk0"
-   size             = data.vsphere_virtual_machine.template.disks.0.size
-   eagerly_scrub    = data.vsphere_virtual_machine.template.disks.0.eagerly_scrub
-   thin_provisioned = data.vsphere_virtual_machine.template.disks.0.thin_provisioned
+    label            = "disk0"
+    size             = data.vsphere_virtual_machine.template.disks.0.size
+    eagerly_scrub    = data.vsphere_virtual_machine.template.disks.0.eagerly_scrub
+    thin_provisioned = data.vsphere_virtual_machine.template.disks.0.thin_provisioned
   }
 
   clone {
@@ -229,7 +229,7 @@ resource "vsphere_virtual_machine" "k8snode2" {
       }
 
       ipv4_gateway    = "192.168.1.1"
-      dns_server_list = ["192.168.1.1","8.8.8.8",]
+      dns_server_list = ["192.168.1.1", "8.8.8.8", ]
     }
   }
   connection {
