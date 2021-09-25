@@ -78,6 +78,14 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
+    # Update repositories
+    - name: Update repos
+      run: apt update -y
+
+    # Install nodejs
+    - name: Install node
+      run: apt install nodejs -y
+
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: terraform init
