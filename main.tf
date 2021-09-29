@@ -72,6 +72,14 @@ data "vsphere_virtual_machine" "template" {
 }
 
 
+resource "local_file" "ansible_inventory" {
+  filename = "mehlj-lab.inv"
+  content  = <<-EOT
+    ${vsphere_virtual_machine.k8snode0.clone[0].customize[0].network_interface[0].ipv4_address}
+    ${vsphere_virtual_machine.k8snode1.clone[0].customize[0].network_interface[0].ipv4_address}
+    ${vsphere_virtual_machine.k8snode2.clone[0].customize[0].network_interface[0].ipv4_address}
+  EOT
+}
 
 
 
@@ -128,7 +136,11 @@ resource "vsphere_virtual_machine" "k8snode0" {
   }
 
   provisioner "remote-exec" {
-    inline = ["yum install epel-release -y", "yum install git ansible -y", "git clone https://github.com/mehlj/mehlj-ansible.git", "ansible-playbook mehlj-ansible/ssh.yml"]
+    inline = ["yum install epel-release -y",
+      "yum install git ansible -y",
+      "git clone https://github.com/mehlj/mehlj-ansible.git",
+      "ansible-playbook mehlj-ansible/playbooks/ssh.yml",
+    "ansible-playbook mehlj-ansible/playbooks/kubernetes.yml"]
   }
 }
 
@@ -184,7 +196,11 @@ resource "vsphere_virtual_machine" "k8snode1" {
   }
 
   provisioner "remote-exec" {
-    inline = ["yum install epel-release -y", "yum install git ansible -y", "git clone https://github.com/mehlj/mehlj-ansible.git", "ansible-playbook mehlj-ansible/ssh.yml"]
+    inline = ["yum install epel-release -y",
+      "yum install git ansible -y",
+      "git clone https://github.com/mehlj/mehlj-ansible.git",
+      "ansible-playbook mehlj-ansible/playbooks/ssh.yml",
+    "ansible-playbook mehlj-ansible/playbooks/kubernetes.yml"]
   }
 }
 
@@ -240,6 +256,10 @@ resource "vsphere_virtual_machine" "k8snode2" {
   }
 
   provisioner "remote-exec" {
-    inline = ["yum install epel-release -y", "yum install git ansible -y", "git clone https://github.com/mehlj/mehlj-ansible.git", "ansible-playbook mehlj-ansible/ssh.yml"]
+    inline = ["yum install epel-release -y",
+      "yum install git ansible -y",
+      "git clone https://github.com/mehlj/mehlj-ansible.git",
+      "ansible-playbook mehlj-ansible/playbooks/ssh.yml",
+    "ansible-playbook mehlj-ansible/playbooks/kubernetes.yml"]
   }
 }
