@@ -84,6 +84,7 @@ resource "local_file" "ansible_inventory" {
 
 
 
+
 resource "vsphere_virtual_machine" "k8snode0" {
   name             = "k8snode0"
   resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
@@ -135,12 +136,17 @@ resource "vsphere_virtual_machine" "k8snode0" {
     host     = self.clone[0].customize[0].network_interface[0].ipv4_address
   }
 
+  provisioner "file" {
+    content     = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["vault"]
+    destination = "/root/.vault_pass.txt"
+  }
+
   provisioner "remote-exec" {
     inline = ["yum install epel-release -y",
       "yum install git ansible -y",
       "git clone https://github.com/mehlj/mehlj-ansible.git",
       "ansible-playbook mehlj-ansible/playbooks/ssh.yml",
-    "ansible-playbook mehlj-ansible/playbooks/kubernetes.yml"]
+    "ansible-playbook mehlj-ansible/playbooks/kubernetes.yml --vault-password-file /root/.vault_pass.txt"]
   }
 }
 
@@ -195,12 +201,17 @@ resource "vsphere_virtual_machine" "k8snode1" {
     host     = self.clone[0].customize[0].network_interface[0].ipv4_address
   }
 
+  provisioner "file" {
+    content     = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["vault"]
+    destination = "/root/.vault_pass.txt"
+  }
+
   provisioner "remote-exec" {
     inline = ["yum install epel-release -y",
       "yum install git ansible -y",
       "git clone https://github.com/mehlj/mehlj-ansible.git",
       "ansible-playbook mehlj-ansible/playbooks/ssh.yml",
-    "ansible-playbook mehlj-ansible/playbooks/kubernetes.yml"]
+    "ansible-playbook mehlj-ansible/playbooks/kubernetes.yml --vault-password-file /root/.vault_pass.txt"]
   }
 }
 
@@ -255,11 +266,16 @@ resource "vsphere_virtual_machine" "k8snode2" {
     host     = self.clone[0].customize[0].network_interface[0].ipv4_address
   }
 
+  provisioner "file" {
+    content     = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["vault"]
+    destination = "/root/.vault_pass.txt"
+  }
+
   provisioner "remote-exec" {
     inline = ["yum install epel-release -y",
       "yum install git ansible -y",
       "git clone https://github.com/mehlj/mehlj-ansible.git",
       "ansible-playbook mehlj-ansible/playbooks/ssh.yml",
-    "ansible-playbook mehlj-ansible/playbooks/kubernetes.yml"]
+    "ansible-playbook mehlj-ansible/playbooks/kubernetes.yml --vault-password-file /root/.vault_pass.txt"]
   }
 }
