@@ -146,7 +146,7 @@ resource "vsphere_virtual_machine" "k8snode0" {
       "yum install git ansible -y",
       "git clone https://github.com/mehlj/mehlj-ansible.git",
       "ansible-playbook mehlj-ansible/playbooks/ssh.yml",
-    "ansible-playbook mehlj-ansible/playbooks/kubernetes.yml --vault-password-file /root/.vault_pass.txt -vvv"]
+    "ansible-playbook mehlj-ansible/playbooks/kubernetes.yml --vault-password-file /root/.vault_pass.txt"]
   }
 }
 
@@ -211,7 +211,7 @@ resource "vsphere_virtual_machine" "k8snode1" {
       "yum install git ansible -y",
       "git clone https://github.com/mehlj/mehlj-ansible.git",
       "ansible-playbook mehlj-ansible/playbooks/ssh.yml",
-    "ansible-playbook mehlj-ansible/playbooks/kubernetes.yml --vault-password-file /root/.vault_pass.txt -vvv"]
+    "ansible-playbook mehlj-ansible/playbooks/kubernetes.yml --vault-password-file /root/.vault_pass.txt"]
   }
 }
 
@@ -276,6 +276,6 @@ resource "vsphere_virtual_machine" "k8snode2" {
       "yum install git ansible -y",
       "git clone https://github.com/mehlj/mehlj-ansible.git",
       "ansible-playbook mehlj-ansible/playbooks/ssh.yml",
-    "ansible-playbook mehlj-ansible/playbooks/kubernetes.yml --vault-password-file /root/.vault_pass.txt -vvv"]
+    "ansible-playbook mehlj-ansible/playbooks/kubernetes.yml --vault-password-file /root/.vault_pass.txt"]
   }
 }
