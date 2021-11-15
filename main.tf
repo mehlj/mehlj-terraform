@@ -279,7 +279,7 @@ resource "vsphere_virtual_machine" "k8snode2" {
       "ansible-playbook mehlj-ansible/playbooks/ssh.yml",
     "ansible-playbook mehlj-ansible/playbooks/kubernetes.yml --vault-password-file /root/.vault_pass.txt"]
   }
-  
+
   # Bootstrap kubernetes cluster with kubespray
   provisioner "local-exec" {
     inline = ["./bootstrap.sh -n mehlj-cluster -f /root/.vault_pass.txt"]
