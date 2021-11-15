@@ -61,9 +61,12 @@ jobs:
     - name: Install node
       run: apt install nodejs -y
 
-    # Install ansible for later kubernetes cluster provisioning
-    - name: Install ansible
-      run: apt install ansible -y
+    # Install dependencies for kubespray for later kubernetes cluster provisioning
+    - name: Install kubespray libraries
+      run: apt install libffi-dev -y
+
+    - name: Install kubespray dependencies
+      run: pip3 install -r kubespray/requirements.txt
 
     - name: Configure ansible
       run: grep -qxF 'ssh_args = -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' /etc/ansible/ansible.cfg || echo 'ssh_args = -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' >> /etc/ansible/ansible.cfg
