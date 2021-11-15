@@ -23,9 +23,23 @@ jobs:
         shell: bash
 
     steps:
-    # Checkout the repository to the GitHub Actions runner
-    - name: Checkout
+    # Checkout this repository to the GitHub Actions runner
+    - name: Checkout local repo
       uses: actions/checkout@v2
+
+    # Checkout kubespray repository for later cluster bootstrapping
+    - name: Checkout kubespray
+      uses: actions/checkout@v2
+      with:
+        repository: mehlj/kubespray
+        path: kubespray
+
+    # Checkout ansible repository for later application deployment
+    - name: Checkout ansible repo
+      uses: actions/checkout@v2
+      with:
+        repository: mehlj/mehlj-ansible
+        path: ansible
 
     # Install the latest version of Terraform CLI
     - name: Setup Terraform
@@ -52,7 +66,7 @@ jobs:
       run: apt install ansible -y
 
     - name: Configure ansible
-      run: echo 'ssh_args = -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' >> /etc/ansible/ansible.cfg
+      run: grep -qxF 'ssh_args = -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' /etc/ansible/ansible.cfg || echo 'ssh_args = -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' >> /etc/ansible/ansible.cfg
     
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
