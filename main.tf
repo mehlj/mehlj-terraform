@@ -282,6 +282,6 @@ resource "vsphere_virtual_machine" "k8snode2" {
 
   # Bootstrap kubernetes cluster with kubespray
   provisioner "local-exec" {
-    command = ["./bootstrap.sh -n mehlj-cluster -f /root/.vault_pass.txt"]
+    command = "./bootstrap.sh -n mehlj-cluster -f /root/.vault_pass.txt"
   }
 }
