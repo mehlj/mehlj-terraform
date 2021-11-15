@@ -3,7 +3,7 @@
 # NOTE - the ansible vault password file must contain the correct password to decrypt the Traefik private key file
 
 # example usage:
-# ./provision.sh -n mehlj-cluster -f ~/.vault_pass.txt
+# ./bootstrap.sh -n mehlj-cluster -f ~/.vault_pass.txt
 
 while [[ "$#" -gt 0 ]]; do
     case $1 in
