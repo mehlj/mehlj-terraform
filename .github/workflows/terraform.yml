@@ -47,6 +47,13 @@ jobs:
     - name: Install node
       run: apt install nodejs -y
 
+    # Install ansible for later kubernetes cluster provisioning
+    - name: Install ansible
+      run: apt install ansible -y
+
+    - name: Configure ansible
+      run: echo 'ssh_args = -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' >> /etc/ansible/ansible.cfg
+    
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: terraform init
