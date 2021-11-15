@@ -32,6 +32,14 @@ terraform apply -auto-approve
 ansible-playbook -i $kubespray_dir/inventory/$kubespray_cluster_name/hosts.yml ansible/kubernetes.yml
 
 # Run kubespray against new kubernetes nodes
+
+# a) fork kubespray and run it from github actions like normal
+  # sounds like this is it
+
+# b) pull from latest kubespray, autoamte changing config files, then deploy from github actions
+  # downside: may change versions without intent
+  # main advice is to schedule cluster upgrade periods. 
+
 cd $kubespray_dir
 ansible-playbook -i inventory/$kubespray_cluster_name/hosts.yml cluster.yml -b 
 
