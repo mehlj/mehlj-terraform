@@ -14,6 +14,11 @@ while [[ "$#" -gt 0 ]]; do
     shift
 done
 
+# Debug
+ls -tlr kubespray/inventory/$kubespray_cluster_name/
+cat kubespray/inventory/$kubespray_cluster_name/hosts.yml
+ls -tlar /root/
+
 # Bootstrap cluster with kubespray
 ansible-playbook -i kubespray/inventory/$kubespray_cluster_name/hosts.yml kubespray/cluster.yml -b 
 
