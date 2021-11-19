@@ -15,25 +15,23 @@ while [[ "$#" -gt 0 ]]; do
 done
 
 # Debug
-ls -tlr kubespray/inventory/$kubespray_cluster_name/
-cat kubespray/inventory/$kubespray_cluster_name/hosts.yml
 ls -tlar /root/
 
 # Bootstrap cluster with kubespray
-ansible-playbook -i kubespray/inventory/$kubespray_cluster_name/hosts.yml kubespray/cluster.yml -b 
+ansible-playbook -i kubespray/inventory/$kubespray_cluster_name/hosts.yaml kubespray/cluster.yml -b 
 
 # Enable SELinux
-ansible all -i kubespray/inventory/$kubespray_cluster_name/hosts.yml -m selinux -a "policy=targeted state=enforcing" -b
+ansible all -i kubespray/inventory/$kubespray_cluster_name/hosts.yaml -m selinux -a "policy=targeted state=enforcing" -b
 
 # Change kubelet.env SELinux context to resolve inital issue
-ansible all -i kubespray/inventory/$kubespray_cluster_name/hosts.yml -m shell -a "semanage fcontext -a -t etc_t -f f /etc/kubernetes/kubelet.env; restorecon /etc/kubernetes/kubelet.env" -b
+ansible all -i kubespray/inventory/$kubespray_cluster_name/hosts.yaml -m shell -a "semanage fcontext -a -t etc_t -f f /etc/kubernetes/kubelet.env; restorecon /etc/kubernetes/kubelet.env" -b
 
 # Reboot all nodes and wait for them to come back up
-ansible all -i kubespray/inventory/$kubespray_cluster_name/hosts.yml -m reboot -b 
+ansible all -i kubespray/inventory/$kubespray_cluster_name/hosts.yaml -m reboot -b 
 
 # Allow non-credentialed use of kubectl (only on control plane hosts)
-ansible kube_control_plane -i kubespray/inventory/$kubespray_cluster_name/hosts.yml -m file -a "path=/home/mehlj/.kube/ owner=mehlj group=mehlj state=directory" -u mehlj
-ansible kube_control_plane -i kubespray/inventory/$kubespray_cluster_name/hosts.yml -m copy -a "src=/etc/kubernetes/admin.conf dest=/home/mehlj/.kube/config owner=mehlj group=mehlj remote_src=yes mode=0600" -u mehlj -b
+ansible kube_control_plane -i kubespray/inventory/$kubespray_cluster_name/hosts.yaml -m file -a "path=/home/mehlj/.kube/ owner=mehlj group=mehlj state=directory" -u mehlj
+ansible kube_control_plane -i kubespray/inventory/$kubespray_cluster_name/hosts.yaml -m copy -a "src=/etc/kubernetes/admin.conf dest=/home/mehlj/.kube/config owner=mehlj group=mehlj remote_src=yes mode=0600" -u mehlj -b
 
 # Deploy traefik and example hello-world applications
 ansible-playbook ansible/playbooks/traefik.yml -b --vault-password-file $vault_password_file

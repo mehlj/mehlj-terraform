@@ -81,6 +81,11 @@ resource "local_file" "ansible_inventory" {
   EOT
 }
 
+resource "local_file" "ansible_vault" {
+  filename = "/root/.vault_pass.txt"
+  content  = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["vault"]
+}
+
 
 
 
