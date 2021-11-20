@@ -69,7 +69,7 @@ jobs:
       run: pip3 install -r kubespray/requirements.txt
 
     - name: Configure ansible
-      run: grep -qxF 'ssh_args = -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' /etc/ansible/ansible.cfg || echo 'ssh_args = -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' >> /etc/ansible/ansible.cfg
+      run: grep -qxF 'ssh_args = -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no' /etc/ansible/ansible.cfg || sed -i '/ssh_args/a ssh\_args = \-o UserKnownHostsFile\=\/dev\/null \-o StrictHostKeyChecking=no' /etc/ansible/ansible.cfg
     
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init

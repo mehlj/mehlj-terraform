@@ -82,8 +82,9 @@ resource "local_file" "ansible_inventory" {
 }
 
 resource "local_file" "ansible_vault" {
-  filename = "/root/.vault_pass.txt"
-  content  = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["vault"]
+  filename        = "/root/.vault_pass.txt"
+  content         = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["vault"]
+  file_permission = 0644
 }
 
 
