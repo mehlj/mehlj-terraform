@@ -53,6 +53,18 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
+		# Add ssh key for future ansible communication
+		- name: Add SSH key
+			env:
+					SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+			run: |
+					mkdir -p /home/runner/.ssh
+					# ANSIBLE_SSH_KEY is the name of the repository secret
+					echo "${{ secrets.ANSIBLE_SSH_KEY }}" > /home/runner/.ssh/github_actions
+					chmod 600 /home/runner/.ssh/github_actions
+					ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+					ssh-add /home/runner/.ssh/github_actions
+
     # Update repositories
     - name: Update repos
       run: apt update -y
