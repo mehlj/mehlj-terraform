@@ -82,7 +82,7 @@ resource "local_file" "ansible_inventory" {
 }
 
 resource "local_file" "ansible_vault" {
-  filename        = "~/.vault_pass.txt"
+  filename        = "/tmp/.vault_pass.txt"
   content         = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["vault"]
   file_permission = 0600
 }
@@ -288,6 +288,6 @@ resource "vsphere_virtual_machine" "k8snode2" {
 
   # Bootstrap kubernetes cluster with kubespray
   provisioner "local-exec" {
-    command = "sleep 60; ./bootstrap.sh -n mehlj-cluster -f ~/.vault_pass.txt"
+    command = "sleep 60; ./bootstrap.sh -n mehlj-cluster -f /tmp/.vault_pass.txt"
   }
 }

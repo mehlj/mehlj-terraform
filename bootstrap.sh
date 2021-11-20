@@ -15,7 +15,7 @@ while [[ "$#" -gt 0 ]]; do
 done
 
 # Debug
-ls -tlar /root/
+ls -tlar /tmp/.vault_pass.txt
 
 # Bootstrap cluster with kubespray
 ansible-playbook -i kubespray/inventory/$kubespray_cluster_name/hosts.yaml kubespray/cluster.yml -b --private-key /home/runner/.ssh/github_actions
@@ -30,8 +30,8 @@ ansible all -i kubespray/inventory/$kubespray_cluster_name/hosts.yaml -m shell -
 ansible all -i kubespray/inventory/$kubespray_cluster_name/hosts.yaml -m reboot -b --private-key /home/runner/.ssh/github_actions
 
 # Allow non-credentialed use of kubectl (only on control plane hosts)
-ansible kube_control_plane -i kubespray/inventory/$kubespray_cluster_name/hosts.yaml -m file -a "path=/home/mehlj/.kube/ owner=mehlj group=mehlj state=directory" -u mehlj --private-key /home/runner/.ssh/github_actions
-ansible kube_control_plane -i kubespray/inventory/$kubespray_cluster_name/hosts.yaml -m copy -a "src=/etc/kubernetes/admin.conf dest=/home/mehlj/.kube/config owner=mehlj group=mehlj remote_src=yes mode=0600" -u mehlj -b --private-key /home/runner/.ssh/github_actions
+ansible kube_control_plane -i kubespray/inventory/$kubespray_cluster_name/hosts.yaml -m file -a "path=/home/mehlj/.kube/ owner=mehlj group=mehlj state=directory" -b --private-key /home/runner/.ssh/github_actions
+ansible kube_control_plane -i kubespray/inventory/$kubespray_cluster_name/hosts.yaml -m copy -a "src=/etc/kubernetes/admin.conf dest=/home/mehlj/.kube/config owner=mehlj group=mehlj remote_src=yes mode=0600" -b --private-key /home/runner/.ssh/github_actions
 
 # Deploy traefik and example hello-world applications
 ansible-playbook ansible/playbooks/traefik.yml -b --vault-password-file $vault_password_file --private-key /home/runner/.ssh/github_actions
