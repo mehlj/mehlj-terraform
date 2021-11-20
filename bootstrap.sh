@@ -34,4 +34,4 @@ ansible kube_control_plane -i kubespray/inventory/$kubespray_cluster_name/hosts.
 ansible kube_control_plane -i kubespray/inventory/$kubespray_cluster_name/hosts.yaml -m copy -a "src=/etc/kubernetes/admin.conf dest=/home/mehlj/.kube/config owner=mehlj group=mehlj remote_src=yes mode=0600" -b --private-key /home/runner/.ssh/github_actions
 
 # Deploy traefik and example hello-world applications
-ansible-playbook ansible/playbooks/traefik.yml -i kubespray/inventory/$kubespray_cluster_name/hosts.yaml --limit k8snode0 -b --vault-password-file $vault_password_file --private-key /home/runner/.ssh/github_actions
+ansible-playbook ansible/playbooks/traefik.yml -i kubespray/inventory/$kubespray_cluster_name/hosts.yaml --limit node1 -b --vault-password-file $vault_password_file --private-key /home/runner/.ssh/github_actions
