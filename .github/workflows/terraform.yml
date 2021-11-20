@@ -53,7 +53,7 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-east-1
 
-		# Add ssh key for future ansible communication
+    # Add ssh key for future ansible communication
     - name: Add SSH key
       env:
        SSH_AUTH_SOCK: /tmp/ssh_agent.sock
