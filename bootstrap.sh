@@ -14,9 +14,6 @@ while [[ "$#" -gt 0 ]]; do
     shift
 done
 
-# Debug
-ls -tlar /tmp/.vault_pass.txt
-
 # Bootstrap cluster with kubespray
 ansible-playbook -i kubespray/inventory/$kubespray_cluster_name/hosts.yaml kubespray/cluster.yml -b --private-key /home/runner/.ssh/github_actions
 
