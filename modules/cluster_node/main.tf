@@ -33,7 +33,9 @@ data "vsphere_virtual_machine" "template" {
 
 
 
-
+locals {
+  provisioner_command = "sleep 60; ./bootstrap.sh -n mehlj-cluster -f /tmp/.vault_pass.txt"
+}
 
 
 resource "local_file" "ansible_vault" {
@@ -43,13 +45,14 @@ resource "local_file" "ansible_vault" {
 }
 
 
-resource "vsphere_virtual_machine" "k8snode0" {
-  name             = "k8snode0"
+resource "vsphere_virtual_machine" "cluster_node" {
+  name             = var.vm_name
   resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
   datastore_id     = data.vsphere_datastore.datastore.id
+  folder           = var.vm_folder
 
-  num_cpus               = 2
-  memory                 = 4096
+  num_cpus               = var.vm_num_cpus
+  memory                 = var.vm_num_memory
   cpu_hot_add_enabled    = true
   cpu_hot_remove_enabled = true
   memory_hot_add_enabled = true
@@ -60,11 +63,15 @@ resource "vsphere_virtual_machine" "k8snode0" {
   network_interface {
     network_id   = data.vsphere_network.mgmt_lan.id
     adapter_type = data.vsphere_virtual_machine.template.network_interface_types[0]
+    use_static_mac = var.vm_static_mac
+    mac_address    = var.vm_mac_address
   }
 
+  # if var.needs_custom_disk_space is not set to True (default value of False), then the template disk size is used.
+  # if var.needs_custom_disk_space is set to True, then a custom disk size is used, determined via the var.vm_disk_space
   disk {
     label            = "disk0"
-    size             = data.vsphere_virtual_machine.template.disks.0.size
+    size             = var.needs_custom_disk_space ? var.vm_disk_space : data.vsphere_virtual_machine.template.disks.0.size  
     eagerly_scrub    = data.vsphere_virtual_machine.template.disks.0.eagerly_scrub
     thin_provisioned = data.vsphere_virtual_machine.template.disks.0.thin_provisioned
   }
@@ -74,16 +81,17 @@ resource "vsphere_virtual_machine" "k8snode0" {
 
     customize {
       linux_options {
-        host_name = "k8snode0"
-        domain    = "lab.io"
+        host_name = lower(var.vm_name)
+        domain    = lower(var.vm_domain)
       }
 
       network_interface {
-        ipv4_address = "192.168.1.210"
+        ipv4_address = var.vm_ip
         ipv4_netmask = 24
       }
 
       ipv4_gateway    = "192.168.1.1"
+      timeout         = "0"
       dns_server_list = ["192.168.1.1", "8.8.8.8", ]
     }
   }
@@ -91,7 +99,7 @@ resource "vsphere_virtual_machine" "k8snode0" {
     type     = "ssh"
     user     = "root"
     password = jsondecode(data.aws_secretsmanager_secret_version.current.secret_string)["ssh"]
-    host     = self.clone[0].customize[0].network_interface[0].ipv4_address
+    host     = var.vm_ip
   }
 
   provisioner "file" {
@@ -105,5 +113,20 @@ resource "vsphere_virtual_machine" "k8snode0" {
       "git clone https://github.com/mehlj/mehlj-ansible.git",
       "ansible-playbook mehlj-ansible/playbooks/ssh.yml",
     "ansible-playbook mehlj-ansible/playbooks/kubernetes.yml --vault-password-file /root/.vault_pass.txt"]
+  }
+
+  # -----Psuedocode:-----
+  # if var.bootstrap_cluster = true:
+  #   Provision the Kubernetes cluster using the bootstrap.sh script
+  # else:
+  #   skip the cluster bootstrapping, and only run a benign echo command to keep Terraform happy
+  # -----end Psuedocode-----
+  # 
+  # 
+  # This logic allows the cluster to be provisioned only once, to speed up the pipeline execution.
+  # The cluster bootstrapping is entirely idempodent, but kubespray takes some time to complete. 
+  # The cluster bootstrapping only needs to be run once, so omitting the step when it is not necessary allows the pipeline to be run faster.
+  provisioner "local-exec" {
+    command = join(" && ", ["echo Bootstrapping cluster..", var.bootstrap_cluster != false ? local.provisioner_command : "echo Not bootstrapping cluster.."])
   }
 }
